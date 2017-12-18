@@ -11101,26 +11101,27 @@ var colors = __webpack_require__(0);
 (0, _colorRequests.getTopColor)();
 
 $('.text-submission button').on('click', function () {
-  getColorInput();
+  handleColorInput();
 });
 
 $('.text-submission textarea').on('keyup', function (e) {
   if (e.which == 13 && !e.shiftKey) {
-    getColorInput();
+    handleColorInput();
   }
 });
 
-var getColorInput = function getColorInput() {
-  var textBox = $('.text-submission textarea');
-  var colorValues = textBox.val().replace(/[^A-Za-z]/g, " ");
-  var colorArray = $.unique(colorValues.split(' '));
+var handleColorInput = function handleColorInput() {
+  var colorArray = getColorArray();
+  appendSwatches(colorArray);
+};
+
+var appendSwatches = function appendSwatches(colorArray) {
   var swatch = $('article.colorized-text');
 
   for (var i = 0; i < colorArray.length; i++) {
     var color = colorArray[i].toLowerCase();
-    console.log(color);
     var rgbColor = colors[color];
-    if (colors[color] && swatch.children('#' + color).length !== 1) {
+    if (colors[color] && swatch.children('#' + color).length === 0) {
       swatch.append('<div class="swatch" id=\'' + color + '\' style="background-color:' + rgbColor + ';"></div>');
       (0, _colorRequests.postColor)(color);
     } else if (colors[color]) {
@@ -11128,6 +11129,12 @@ var getColorInput = function getColorInput() {
     }
   }
   textBox.val('');
+};
+
+var getColorArray = function getColorArray() {
+  var textBox = $('.text-submission textarea');
+  var colorValues = textBox.val().replace(/[^A-Za-z]/g, " ");
+  return $.unique(colorValues.split(' '));
 };
 
 /***/ }),
